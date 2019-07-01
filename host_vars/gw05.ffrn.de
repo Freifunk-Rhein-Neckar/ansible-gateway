@@ -1,0 +1,13 @@
+---
+gw_id: '5'
+dhcp_range: "10.142.124.1 10.142.127.254"
+fastd_priv_key: "REDACTED"
+ipv6_br_addr_list:
+  - '2a01:4f8:171:fcff::5'
+  - '2a01:4f8:171:fcff:5::53'
+gw_mac: "52:54:00:5e:60:66"
+bat_mac: "d2:2f:9c:dd:5d:be"
+fastd_peer_limit: "100"
+interfaces_bat:
+  - "eth1"
+interfaces_bridge: ""

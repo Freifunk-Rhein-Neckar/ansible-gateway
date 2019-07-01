@@ -1,0 +1,61 @@
+---
+- name: install dkms package
+  apt:
+    name: dkms
+    state: latest
+    update_cache: yes
+    
+- name: install build-essential package
+  apt:
+    name: build-essential
+    state: latest
+    update_cache: yes
+    
+- name: install pkg-config package
+  apt:
+    name: pkg-config
+    state: latest
+    update_cache: yes
+
+- name: get batman-adv source from git
+  git:
+    repo: git://git.open-mesh.org/batman-adv.git
+    dest: /usr/src/batman-adv-{{ batman_adv_version }}
+    version: "{{ batman_adv_commit }}"
+  register: git_batman_state
+  
+- name: create badman-adv dkms config from template    
+  template:
+    src=batman-adv.dkms.conf.j2
+    dest=/usr/src/batman-adv-{{ batman_adv_version }}/dkms.conf
+    owner=root
+    group=root
+    mode=0640
+    backup=yes
+    
+- name: batman-adv_dkms_add
+  shell: dkms add -m batman-adv -v {{ batman_adv_version }}
+  when: git_batman_state.changed
+ 
+- name: batman-adv_dkms_build
+  shell: dkms build -m batman-adv -v {{ batman_adv_version }}
+  when: git_batman_state.changed
+  
+- name: batman-adv_dkms_install
+  shell: dkms install -m batman-adv -v {{ batman_adv_version }}
+  when: git_batman_state.changed
+
+- name: add batman-adv to /etc/modules
+  lineinfile:
+    dest=/etc/modules
+    line="batman_adv"
+
+# to prevent broken gateways because of multi interface bat devices
+# reboot if a kernel panic occurs
+
+- name: add autoreboot on kernel panic
+  sysctl:
+    name=kernel.panic
+    value=10
+    state=present
+    reload=yes

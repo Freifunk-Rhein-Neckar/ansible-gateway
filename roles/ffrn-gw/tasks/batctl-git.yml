@@ -1,0 +1,32 @@
+---
+- name: install dependencies
+  apt: name={{item}} state=installed
+  with_items:
+    - git
+    - libnl-3-dev
+    - libnl-genl-3-dev
+    - checkinstall
+    - build-essential
+
+- name: check current batctl version
+  shell: batctl -v | awk '{ print $2 }'
+  register: batctl_current_version
+
+- name: get batctl source from git
+  git:
+    repo: git://git.open-mesh.org/batctl.git
+    dest: /usr/src/batctl-{{ batctl_version }}
+    version: "{{ batctl_commit }}"
+  when: batctl_current_version != batctl_version
+    
+- name: build batctl
+  shell: make -j$(nproc)
+  args:
+    chdir: /usr/src/batctl-{{ batctl_version }}
+  when: batctl_current_version != batctl_version
+    
+- name: install new batctl
+  shell: checkinstall -y --nodoc --pkgname batctl --pkgversion {{ batctl_version }} --fstrans=no
+  args:
+    chdir: /usr/src/batctl-{{ batctl_version }}
+  when: batctl_current_version != batctl_version

@@ -1,0 +1,20 @@
+---
+- name: load batman-adv
+  modprobe:
+    name=batman-adv
+    state=present
+
+- name: add batman-adv to /etc/modules
+  lineinfile:
+    dest=/etc/modules
+    line="batman_adv"
+
+# to prevent broken gateways because of multi interface bat devices
+# reboot if a kernel panic occurs
+
+- name: add autoreboot on kernel panic
+  sysctl:
+    name=kernel.panic
+    value=10
+    state=present
+    reload=yes

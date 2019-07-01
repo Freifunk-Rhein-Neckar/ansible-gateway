@@ -1,0 +1,21 @@
+*nat
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -s 10.142.0.0/16 -o eth0 -j MASQUERADE
+COMMIT
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A FORWARD -d 10.0.0.0/8 -o eth0 -j DROP
+-A FORWARD -d 169.254.0.0/16 -o eth0 -j DROP
+-A FORWARD -d 172.16.0.0/12 -o eth0 -j DROP
+-A FORWARD -d 127.0.0.0/8 -o eth0 -j DROP
+-A FORWARD -d 100.64.0.0/10 -o eth0 -j DROP
+-A FORWARD -d 192.168.0.0/16 -o eth0 -j DROP
+-A FORWARD -d 30.0.0.0/8 -o eth0 -j DROP
+-A FORWARD -p tcp -m tcp --dport 25 -j REJECT --reject-with icmp-port-unreachable
+COMMIT
+

@@ -1,0 +1,19 @@
+---
+- name: install postfix
+  apt:
+    name=postfix
+    state=present
+
+- name: set inet interface to loopback only
+  lineinfile:
+    dest=/etc/postfix/main.cf
+    regexp="^inet_interfaces = all"
+    line="inet_interfaces = loopback-only"
+    backrefs=yes
+  notify: restart postfix
+
+- name: set root alias
+  lineinfile:
+    dest=/etc/aliases
+    line='root{{':'}} {{ admin_contact }}'
+  notify: reload aliases

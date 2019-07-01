@@ -1,0 +1,15 @@
+---
+# Local stuff
+gw_id: '8'
+dhcp_range: "10.142.108.1 10.142.111.254"
+fastd_priv_key: "REDACTED"
+ipv6_br_addr_list:
+  - '2a01:4f8:171:fcff::8'
+  - '2a01:4f8:171:fcff:8::53'
+gw_mac: "52:54:00:8e:60:44"
+bat_mac: "d2:2f:9c:dd:6d:88"
+fastd_peer_limit: "160"
+interfaces_bridge:
+  - "eth1"
+interfaces_bat:
+  - "eth2"

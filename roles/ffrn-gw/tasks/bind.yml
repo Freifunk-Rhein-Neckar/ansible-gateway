@@ -1,0 +1,24 @@
+---
+- name: install bind9
+  apt:
+    name="bind9"
+
+- name: create bind config
+  template:
+    src=named.conf.options.j2
+    dest=/etc/bind/named.conf.options
+    owner=root
+    group=bind
+    mode=0640
+    backup=yes
+  notify: restart bind
+
+- name: copy bind zones
+  copy:
+    src=named.conf.local
+    dest=/etc/bind/named.conf.local
+    owner=root
+    group=bind
+    mode=0640
+  notify: restart bind
+

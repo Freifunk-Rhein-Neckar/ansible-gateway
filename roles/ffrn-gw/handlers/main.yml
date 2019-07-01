@@ -1,0 +1,51 @@
+---
+- name: restart fastd
+  service:
+    name=fastd
+    state=restarted
+
+- name: restart ntp
+  service:
+    name=ntp
+    state=restarted
+
+- name: restart bind
+  service:
+    name=bind9
+    state=restarted
+
+- name: reload aliases
+  shell: newaliases
+
+- name: reload tinc
+  service:
+    name=tinc
+    state=reloaded
+
+- name: restart isc-dhcpd
+  service:
+    name=isc-dhcp-server
+    state=restarted
+
+- name: restart postfix
+  service:
+    name=postfix
+    state=restarted
+
+- name: restart rsyslog
+  service:
+    name=rsyslog
+    state=restarted
+
+- name: reload iptable rules
+  shell: iptables-restore < /etc/iptables/rules.v4
+
+- name: restart collectd
+  service:
+    name=collectd
+    state=restarted
+
+- name: restart respondd
+  service:
+    name=respondd@ffrn
+    state=restarted

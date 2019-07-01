@@ -1,0 +1,29 @@
+---
+- name: install isc-dhcpd
+  apt:
+    name=isc-dhcp-server
+
+- name: disable ipv6 in dhcp config
+  lineinfile:
+    dest=/etc/default/isc-dhcp-server
+    regexp='^INTERFACESv4='
+    line='INTERFACESv4="ffrn-br"'
+
+- name: create and install dhcp config
+  template:
+    src=dhcpd.j2
+    dest=/etc/dhcp/dhcpd.conf
+    owner=root
+    group=root
+    mode=0640
+    backup=yes
+  notify: restart isc-dhcpd
+
+- name: disable dhcpd log
+  copy:
+    src=02disableDHCPD.conf
+    dest=/etc/rsyslog.d/02disableDHCPD.conf
+    owner=root
+    group=root
+    mode=0640
+  notify: restart rsyslog

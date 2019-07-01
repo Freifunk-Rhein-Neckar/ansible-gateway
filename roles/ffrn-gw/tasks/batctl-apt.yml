@@ -1,0 +1,4 @@
+---
+- name: install batctl
+  apt:
+    name=batctl

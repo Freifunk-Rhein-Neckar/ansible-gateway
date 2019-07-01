@@ -1,0 +1,10 @@
+- name: disable predictable network interface naming
+  lineinfile:
+    dest=/etc/default/grub
+    regexp='^GRUB_CMDLINE_LINUX='
+    line='GRUB_CMDLINE_LINUX="biosdevname=0 net.ifnames=0"'
+  register: grubfile
+
+- name: update-grub
+  command: update-grub
+  when: grubfile|changed

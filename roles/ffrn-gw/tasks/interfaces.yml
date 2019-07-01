@@ -1,0 +1,19 @@
+---
+- name: install ffrn interfaces
+  template:
+    src=ffrn_interfaces.j2
+    dest=/etc/network/interfaces.d/ffrn_interfaces
+    owner=root
+    group=root
+    mode=0644
+    backup=no
+
+- name: make sure to source /etc/network/interfaces.d/
+  lineinfile:
+    dest=/etc/network/interfaces
+    line="source /etc/network/interfaces.d/*"
+
+- name: add 6internal routing table
+  lineinfile:
+    dest: /etc/iproute2/rt_tables
+    line: "2    6internal"

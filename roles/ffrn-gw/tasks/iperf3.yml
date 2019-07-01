@@ -1,0 +1,24 @@
+---
+- name: install iperf3
+  apt:
+    name=iperf3
+
+- name: create iperf user
+  user:
+    name=iperf
+    createhome=no
+    system=yes
+
+- name: copy iperf3 systemd config
+  template:
+    src=iperf3.service.j2
+    dest=/etc/systemd/system/iperf3.service
+    owner=root
+    group=root
+    mode=0640
+
+- name: enable iperf3 service
+  service:
+    name=iperf3
+    enabled=yes
+    state=restarted

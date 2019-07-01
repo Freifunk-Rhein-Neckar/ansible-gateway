@@ -1,0 +1,26 @@
+---
+- name: install repondd server script dependencies
+  apt:
+    pkg={{ item }}
+  with_items:
+    - ethtool
+    - python3
+    - lsb-release
+
+- name: clone meshviewer git repository
+  git:
+    repo: https://github.com/ffnord/mesh-announce.git 
+    dest: /opt/mesh-announce
+
+- name: copy repondd systemd service file
+  copy:
+    src=respondd@.service
+    dest=/etc/systemd/system/respondd@.service
+    owner=root
+    group=root
+    mode=0640
+
+- name: enable respondd service
+  service:
+    name=respondd@ffrn
+    enabled=yes

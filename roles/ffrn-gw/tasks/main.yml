@@ -1,0 +1,35 @@
+---
+- name: install dependencies
+  apt:
+    pkg={{ item }}
+  with_items:
+    - git
+    - vim
+    - mtr-tiny
+    - htop
+    - iftop
+    - tshark
+    - bridge-utils
+    - tmux
+    - qemu-guest-agent
+
+- name: notify about reboot
+  cron:
+    name="notify about reboot"
+    special_time=reboot
+    job='''date | mail -s  "`hostname` rebooted" {{ admin_contact }}'''
+
+- include: interfaces.yml
+- include: batman-adv-git.yml
+- include: batctl-git.yml
+- include: dhcpd.yml
+- include: bind.yml
+- include: fastd.yml
+- include: respondd.yml
+- include: forwarding.yml
+- include: ntpd.yml
+- include: postfix.yml
+- include: grafana.yml
+- include: iperf3.yml
+- include: iptables.yml
+- include: grub.yml

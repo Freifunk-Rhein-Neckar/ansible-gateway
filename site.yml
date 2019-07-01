@@ -1,0 +1,7 @@
+---
+
+- name: Install ffrn gateway
+  remote_user: root
+  hosts: ffrn-gw
+  roles:
+    - ffrn-gw

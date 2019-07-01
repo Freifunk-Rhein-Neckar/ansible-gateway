@@ -1,0 +1,14 @@
+[Unit]
+Description=Respondd
+Wants=network.target
+BindsTo=sys-subsystem-net-devices-%i\x2dbat.device
+After=sys-subsystem-net-devices-%i\x2dbat.device
+StartLimitIntervalSec=0
+
+[Service]
+ExecStart=/opt/mesh-announce/respondd.py -d /opt/mesh-announce -i %i-br -b %i-bat
+Restart=always
+Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+[Install]
+WantedBy=multi-user.target

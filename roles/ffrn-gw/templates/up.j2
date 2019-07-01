@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+# enable fastd interface
+ip link set up dev ffrn-vpn
+
+echo "activate NAT for IPv4"
+iptables -t nat -A POSTROUTING -o eth0 -s {{ v4_subnet_prefix }}.0.0/16 -j MASQUERADE
+
+echo "restart some services"
+service isc-dhcp-server restart

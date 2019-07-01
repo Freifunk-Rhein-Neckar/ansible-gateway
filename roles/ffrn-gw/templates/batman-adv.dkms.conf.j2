@@ -1,0 +1,14 @@
+PACKAGE_NAME=batman-adv
+PACKAGE_VERSION={{ batman_adv_version }}
+
+DEST_MODULE_LOCATION=/extra
+BUILT_MODULE_NAME=batman-adv
+BUILT_MODULE_LOCATION=build/net/batman-adv/
+
+{% if batman_adv_debug %}
+MAKE="make KERNELPATH=${kernel_source_dir} CONFIG_BATMAN_ADV_DEBUG=y"
+{% else %}
+MAKE="make KERNELPATH=${kernel_source_dir}"
+{% endif %}
+CLEAN="make KERNELPATH=${kernel_source_dir} clean"
+AUTOINSTALL="yes"

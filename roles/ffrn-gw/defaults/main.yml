@@ -1,0 +1,10 @@
+v4_subnet_prefix: '10.142'
+bind_allow_recursion_subnets:
+  - '127.0.0.1'
+  - '10.142.0.0/16'
+  - '172.23.138.0/23'
+  - '2a01:4f8:171:ff00::/56'
+v6_subnet_prefix: '2a01:4f8:171:fcff'
+v4_dns_prefix: '.53.'
+v4_main_prefix: '.0.'
+admin_contact: 'admin@example.com'

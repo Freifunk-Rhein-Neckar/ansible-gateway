@@ -1,0 +1,67 @@
+---
+- name: install apt-transport-https
+  apt:
+    update_cache=yes
+    pkg=apt-transport-https
+
+- name: install fastd
+  apt:
+    name=fastd
+    update_cache=yes
+  register: fastd_installed
+
+- name: create fastd dirs
+  file:
+    path=/etc/fastd/{{ item }}
+    state=directory
+    mode=0755
+  with_items:
+    - 'ffrn-mesh-vpn'
+    - 'ffrn-mesh-vpn/peers'
+  when: fastd_installed|success
+
+- name: create fastd config file
+  template:
+    src=fastd.j2
+    dest=/etc/fastd/ffrn-mesh-vpn/fastd.conf
+    owner=root
+    group=root
+    mode=0640
+    backup=yes
+  when: fastd_installed|success
+
+- name: copy fastd up script
+  template:
+    src=up.j2
+    dest=/etc/fastd/ffrn-mesh-vpn/up.sh
+    owner=root
+    group=root
+    mode=0755
+    backup=yes
+  when: fastd_installed|success
+  notify: restart fastd
+
+# cronjob to reread config every x minutes we need this to get the new node config
+# ready for use (should be the half of the fastd key sync periode)
+
+- name: cron fastd reload
+  cron:
+    name="reload fastd"
+    minute="*/2"
+    job="kill -HUP `cat /var/run/fastd.ffrn-mesh-vpn.pid`"
+  when: fastd_installed|success
+
+- name: install rsync for fastd key sync
+  apt:
+    name="rsync"
+
+- name: cron fastd key sync
+  cron:
+    name="pull fastd keys"
+    minute="*/5"
+    job='/usr/bin/rsync -avze "ssh -i .ssh/id_rsa" --delete root@tools.ffrn.de{{':'}} /etc/fastd/ffrn-mesh-vpn/peers/ > /dev/null'
+
+- name: add hostkey for gw01 for key sync
+  known_hosts:
+    name: gw01.freifunk-rhein-neckar.de
+    key: "gw01.freifunk-rhein-neckar.de ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNfqel+nRgx1ck4wadEupd8lTOKnTqdjHJFbo3ASODU1HQv1zVP8edZd1jMZOmGBQwypWVbSAlJFQlEEPDZxeds="

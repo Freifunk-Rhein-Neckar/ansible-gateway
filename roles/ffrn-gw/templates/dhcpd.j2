@@ -1,0 +1,21 @@
+# {{ ansible_managed }}
+
+ddns-update-style none;
+
+default-lease-time 1800;
+max-lease-time 3600;
+
+authoritative;
+
+log-facility local7;
+
+subnet 10.142.0.0 netmask 255.255.0.0 {
+    range {{ dhcp_range }};
+    option routers {{ v4_subnet_prefix ~ v4_main_prefix ~ gw_id }};
+    option domain-name-servers {{ v4_subnet_prefix ~ v4_dns_prefix ~ gw_id }};
+    option domain-name "user.freifunk-rhein-neckar.de";
+    option ntp-servers {{ v4_subnet_prefix ~ v4_main_prefix ~ gw_id }};
+    interface ffrn-br;
+#  option interface-mtu 1426;
+}
+

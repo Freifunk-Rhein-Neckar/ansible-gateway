@@ -1,0 +1,24 @@
+---
+is_gateway: true
+is_dhcp_server: true
+
+v4_subnet_prefix: '10.142'
+bind_allow_recursion_subnets:
+  - '127.0.0.1'
+  - '10.142.0.0/16'
+  - '172.23.138.0/23'
+  - '2a01:4f8:171:fc00::/56'
+v6_subnet_prefix: '2a01:4f8:171:fcff'
+v4_dns_prefix: '.53.'
+v4_main_prefix: '.0.'
+v4_vpn_prefix: '.12.'
+admin_contact: 'admin@example.com'
+tinc_v6upstream_link_prefix: 'fe80:6'
+v6upstream_address: 'fe80:6::42'
+v6_mapbone_prefix: "fe80:42::"
+v4_mapbone_prefix: "10.142.11."
+batman_adv_version: "v2018.1"
+batman_adv_commit: "eb3e56f832db2c6c12516ce99aabb5c24c64591d"
+batman_adv_debug: False
+batctl_version: "v2018.1"
+batctl_commit: "d06cb618ee3df763d2226d473fc460a8ae82a108"

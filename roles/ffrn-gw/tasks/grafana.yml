@@ -1,0 +1,47 @@
+---
+- name: install grafana script dependencies
+  apt:
+    pkg={{ item }}
+  with_items:
+    - gawk
+    - python-pip
+
+- name: install python packages
+  pip:
+    name={{ item }}
+  with_items:
+    - hurry.filesize
+    - npyscreen
+    - isc_dhcp_leases
+
+- name: remove grafana script
+  file:
+    path=/opt/gw_stats.sh
+    state=absent
+
+- name: clone grafana_tools
+  git:
+    repo: https://github.com/Freifunk-Rhein-Neckar/grafana_tools.git
+    dest: /opt/grafana_tools/
+    update: yes
+  ignore_errors: yes
+
+- name: clone ff-tools
+  git:
+    repo: https://github.com/ffrl/ff-tools.git
+    dest: /root/ff-tools/
+    update: no
+
+- name: copy our own fastd-statistics.py
+  copy:
+    src=fastd-statistics.py
+    dest=/root/ff-tools/fastd/fastd-statistics.py
+    owner=root
+    group=root
+    mode=0755
+
+- name: install grafana cron job
+  cron:
+    name="grafana stats"
+    minute="*/1"
+    job="/opt/grafana_tools/gw_stats.sh"
