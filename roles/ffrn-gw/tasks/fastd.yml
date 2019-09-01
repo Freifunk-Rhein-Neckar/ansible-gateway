@@ -18,7 +18,7 @@
   with_items:
     - 'ffrn-mesh-vpn'
     - 'ffrn-mesh-vpn/peers'
-  when: fastd_installed|success
+  when: fastd_installed is success
 
 - name: create fastd config file
   template:
@@ -28,7 +28,7 @@
     group=root
     mode=0640
     backup=yes
-  when: fastd_installed|success
+  when: fastd_installed is success
 
 - name: copy fastd up script
   template:
@@ -38,7 +38,7 @@
     group=root
     mode=0755
     backup=yes
-  when: fastd_installed|success
+  when: fastd_installed is success
   notify: restart fastd
 
 # cronjob to reread config every x minutes we need this to get the new node config
@@ -49,7 +49,7 @@
     name="reload fastd"
     minute="*/2"
     job="kill -HUP `cat /var/run/fastd.ffrn-mesh-vpn.pid`"
-  when: fastd_installed|success
+  when: fastd_installed is success
 
 - name: install rsync for fastd key sync
   apt:

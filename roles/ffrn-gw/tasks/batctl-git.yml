@@ -1,12 +1,13 @@
 ---
 - name: install dependencies
-  apt: name={{item}} state=installed
-  with_items:
-    - git
-    - libnl-3-dev
-    - libnl-genl-3-dev
-    - checkinstall
-    - build-essential
+  apt:
+    pkg:
+      - git
+      - libnl-3-dev
+      - libnl-genl-3-dev
+      - checkinstall
+      - build-essential
+    state: present
 
 - name: check current batctl version
   shell: batctl -v | awk '{ print $2 }'
