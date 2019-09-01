@@ -15,6 +15,6 @@
     src=ntp.conf
     dest=/etc/ntp.conf
     mode=640
-  when: ntp_installed|success
+  when: ntp_installed is success
   notify:
     - restart ntp

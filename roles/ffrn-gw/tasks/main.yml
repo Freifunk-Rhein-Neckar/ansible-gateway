@@ -1,17 +1,16 @@
 ---
 - name: install dependencies
   apt:
-    pkg={{ item }}
-  with_items:
-    - git
-    - vim
-    - mtr-tiny
-    - htop
-    - iftop
-    - tshark
-    - bridge-utils
-    - tmux
-    - qemu-guest-agent
+    pkg:
+      - git
+      - vim
+      - mtr-tiny
+      - htop
+      - iftop
+      - tshark
+      - bridge-utils
+      - tmux
+      - qemu-guest-agent
 
 - name: notify about reboot
   cron:

@@ -1,11 +1,10 @@
 ---
 - name: install repondd server script dependencies
   apt:
-    pkg={{ item }}
-  with_items:
-    - ethtool
-    - python3
-    - lsb-release
+    pkg:
+      - ethtool
+      - python3
+      - lsb-release
 
 - name: clone meshviewer git repository
   git:

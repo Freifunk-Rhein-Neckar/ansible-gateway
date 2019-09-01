@@ -7,4 +7,4 @@
 
 - name: update-grub
   command: update-grub
-  when: grubfile|changed
+  when: grubfile is changed
